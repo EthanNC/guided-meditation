@@ -2,7 +2,7 @@
 
 5 minute guided meditation using the Trataka technique.
 
-[Source](https://www.youtube.com/watch?v=00000000000)
+[Source](https://youtu.be/snt1i5_1uhY?si=dY8b3u2hA-YKQbrB&t=81)
 
 
 ## Development
