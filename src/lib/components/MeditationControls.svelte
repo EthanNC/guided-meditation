@@ -1,46 +1,13 @@
 <script lang="ts">
-  interface Props {
-    sessionActive: boolean;
-    sessionTime: number;
-    currentSegment: number;
-    meditationSegments: Array<{name: string, duration: number, instruction: string}>;
-    onStartSession: () => void;
-    onPauseSession: () => void;
-    onResumeSession: () => void;
-    onEndSession: () => void;
-  }
-
-  let { 
-    sessionActive, 
-    sessionTime, 
-    currentSegment, 
-    meditationSegments,
-    onStartSession,
-    onPauseSession,
-    onResumeSession,
-    onEndSession
-  }: Props = $props();
+  import { getMeditationContext } from '$lib/stores/context';
   
+  const meditation = getMeditationContext();
   let sidebarCollapsed = $state(false);
 
   function formatTime(seconds: number): string {
     const mins = Math.floor(seconds / 60);
     const secs = seconds % 60;
     return `${mins}:${secs.toString().padStart(2, '0')}`;
-  }
-
-  function getTotalDuration(): number {
-    return meditationSegments.reduce((total: number, segment: {name: string, duration: number, instruction: string}) => total + segment.duration, 0);
-  }
-
-  function getSegmentProgress(): number {
-    let elapsed = 0;
-    for (let i = 0; i < currentSegment; i++) {
-      elapsed += meditationSegments[i].duration;
-    }
-    const segmentElapsed = sessionTime - elapsed;
-    const segmentDuration = meditationSegments[currentSegment]?.duration || 1;
-    return Math.min((segmentElapsed / segmentDuration) * 100, 100);
   }
 
   function toggleSidebar() {
@@ -62,53 +29,53 @@
 
     <!-- Session Controls -->
     <div class="controls-panel">
-      {#if !sessionActive && sessionTime === 0}
-        <button class="start-btn" onclick={onStartSession}>
+      {#if !meditation.active && meditation.elapsed === 0}
+        <button class="start-btn" onclick={() => meditation.startSession()}>
           <span class="btn-icon">🧘‍♂️</span>
           <div class="btn-text">
             <span>Begin Meditation</span>
-            <span class="duration">{formatTime(getTotalDuration())}</span>
+            <span class="duration">{formatTime(meditation.totalDuration)}</span>
           </div>
         </button>
-      {:else if sessionActive}
+      {:else if meditation.active}
         <div class="session-info">
-          <h3 class="current-segment">{meditationSegments[currentSegment]?.name}</h3>
-          <p class="instruction">{meditationSegments[currentSegment]?.instruction}</p>
+          <h3 class="current-segment">{meditation.currentSegmentData?.name}</h3>
+          <p class="instruction">{meditation.currentSegmentData?.instruction}</p>
           
           <div class="progress-container">
             <div class="progress-bar">
-              <div class="progress-fill" style="width: {getSegmentProgress()}%"></div>
+              <div class="progress-fill" style="width: {meditation.segmentProgress}%"></div>
             </div>
             <div class="time-display">
-              {formatTime(sessionTime)} / {formatTime(getTotalDuration())}
+              {formatTime(Math.floor(meditation.elapsed))} / {formatTime(meditation.totalDuration)}
             </div>
           </div>
 
           <div class="control-buttons">
-            <button class="control-btn pause" onclick={onPauseSession}>⏸️ Pause</button>
-            <button class="control-btn end" onclick={onEndSession}>⏹️ End</button>
+            <button class="control-btn pause" onclick={() => meditation.pauseSession()}>⏸️ Pause</button>
+            <button class="control-btn end" onclick={() => meditation.endSession()}>⏹️ End</button>
           </div>
         </div>
       {:else}
         <!-- Paused state -->
         <div class="session-info">
           <h3>Session Paused</h3>
-          <p>{meditationSegments[currentSegment]?.name} - {formatTime(sessionTime)}</p>
+          <p>{meditation.currentSegmentData?.name} - {formatTime(Math.floor(meditation.elapsed))}</p>
           <div class="control-buttons">
-            <button class="control-btn resume" onclick={onResumeSession}>▶️ Resume</button>
-            <button class="control-btn end" onclick={onEndSession}>⏹️ End</button>
+            <button class="control-btn resume" onclick={() => meditation.resumeSession()}>▶️ Resume</button>
+            <button class="control-btn end" onclick={() => meditation.endSession()}>⏹️ End</button>
           </div>
         </div>
       {/if}
     </div>
 
     <!-- Segment Timeline -->
-    <div class="timeline" class:visible={sessionActive || sessionTime > 0}>
+    <div class="timeline" class:visible={meditation.active || meditation.elapsed > 0}>
       <h4>Meditation Journey</h4>
-      {#each meditationSegments as segment, index}
+      {#each meditation.segments as segment, index}
         <div class="timeline-segment" 
-             class:active={currentSegment === index}
-             class:completed={currentSegment > index}>
+             class:active={meditation.currentSegment === index}
+             class:completed={meditation.currentSegment > index}>
           <div class="segment-dot"></div>
           <span class="segment-name">{segment.name}</span>
           <span class="segment-duration">{formatTime(segment.duration)}</span>
@@ -188,7 +155,6 @@
     margin: 0 0 0.5rem 0;
     letter-spacing: -0.02em;
   }
-
 
   .controls-panel {
     background: rgba(255, 255, 255, 0.05);

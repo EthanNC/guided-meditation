@@ -2,81 +2,15 @@
   import { onMount } from 'svelte';
   import YantraDisplay from '$lib/components/YantraDisplay.svelte';
   import MeditationControls from '$lib/components/MeditationControls.svelte';
+  import { createMeditationContext } from '$lib/stores/context';
   
-  let isLoaded = $state(false);
-  let sessionActive = $state(false);
-  let currentSegment = $state(0);
-  let sessionTime = $state(0);
-  let sessionTimer: number | null = null;
-
-  // Meditation segments configuration
-  const meditationSegments = [
-    { name: "Preparation", duration: 3, instruction: "Find a comfortable position and breathe naturally" },
-    { name: "Outer Focus", duration: 6, instruction: "Focus on the outer square and lotus petals of the Yantra" },
-    { name: "Triangle Layers", duration: 9, instruction: "Move your attention through the interlocking triangles" },
-    { name: "Inner Journey", duration: 10, instruction: "Draw your focus toward the center, layer by layer" },
-    { name: "Bindu Meditation", duration: 10, instruction: "Rest your awareness at the central point (bindu)" },
-    { name: "Unity", duration: 6, instruction: "Experience the oneness of form and consciousness" },
-    { name: "Integration", duration: 3, instruction: "Slowly return your awareness to your surroundings" },
-    { name: "Relaxation", duration: 3, instruction: "Relax and let the meditation wash over you" },
-    { name: "End", duration: 3, instruction: "End of meditation" }
-  ];
-
-  $effect(() => {
-    if (sessionActive && sessionTimer === null) {
-      sessionTimer = setInterval(() => {
-        sessionTime++;
-        updateCurrentSegment();
-      }, 1000);
-    } else if (!sessionActive && sessionTimer) {
-      clearInterval(sessionTimer);
-      sessionTimer = null;
-    }
-  });
-
-  function updateCurrentSegment() {
-    let elapsed = 0;
-    for (let i = 0; i < meditationSegments.length; i++) {
-      elapsed += meditationSegments[i].duration;
-      if (sessionTime < elapsed) {
-        currentSegment = i;
-        return;
-      }
-    }
-    // Session complete
-    endSession();
-  }
-
-  function startSession() {
-    sessionActive = true;
-    sessionTime = 0;
-    currentSegment = 0;
-  }
-
-  function pauseSession() {
-    sessionActive = false;
-  }
-
-  function resumeSession() {
-    sessionActive = true;
-  }
-
-  function endSession() {
-    sessionActive = false;
-    sessionTime = 0;
-    currentSegment = 0;
-    if (sessionTimer) {
-      clearInterval(sessionTimer);
-      sessionTimer = null;
-    }
-  }
+  // Create the meditation state context - this makes it available to all child components
+  const meditation = createMeditationContext();
 
   onMount(() => {
-    isLoaded = true;
+    // Cleanup when component is destroyed
     return () => {
-      if (sessionTimer) {
-        clearInterval(sessionTimer);
-      }
+      meditation.destroy();
     };
   });
 </script>
@@ -86,22 +20,14 @@
   <meta name="description" content="Interactive guided meditation with sacred geometry" />
 </svelte:head>
 
-{#if isLoaded}
-  <YantraDisplay 
-    {currentSegment} 
-    {sessionActive} 
-  />
-  
-  <MeditationControls 
-    {sessionActive}
-    {sessionTime}
-    {currentSegment}
-    {meditationSegments}
-    onStartSession={startSession}
-    onPauseSession={pauseSession}
-    onResumeSession={resumeSession}
-    onEndSession={endSession}
-  />
+{#if meditation.isLoaded}
+  <YantraDisplay />
+  <MeditationControls />
+{:else}
+  <div class="loading">
+    <div class="loading-spinner"></div>
+    <p>Loading meditation audio...</p>
+  </div>
 {/if}
 
 <style>
@@ -117,5 +43,33 @@
 
   :global(html) {
     overflow: hidden;
+  }
+
+  .loading {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+    gap: 1rem;
+  }
+
+  .loading-spinner {
+    width: 40px;
+    height: 40px;
+    border: 4px solid rgba(255, 255, 255, 0.1);
+    border-left: 4px solid #fff;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+  }
+
+  @keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+  }
+
+  .loading p {
+    font-size: 1.1rem;
+    opacity: 0.8;
   }
 </style>

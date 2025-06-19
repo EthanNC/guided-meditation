@@ -1,15 +1,11 @@
 <script lang="ts">
   import svgContent from '$lib/shriyantra.svg?raw';
+  import { getMeditationContext } from '$lib/stores/context';
   
-  interface Props {
-    currentSegment: number;
-    sessionActive: boolean;
-  }
-
-  let { currentSegment, sessionActive }: Props = $props();
+  const meditation = getMeditationContext();
 </script>
 
-<div class="yantra-fullscreen segment-{currentSegment} {sessionActive ? 'active' : ''}">
+<div class="yantra-fullscreen segment-{meditation.currentSegment} {meditation.active ? 'active' : ''}">
   {@html svgContent}
 </div>
 
