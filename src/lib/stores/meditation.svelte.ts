@@ -16,7 +16,7 @@ export class MeditationState {
     },
     {
       name: "Center Focus",
-      duration: 85,
+      duration: 82,
       instruction:
         "Stare at the center red dot. Eventually move your attention to the yellow triangle surround the center red dot. Try not to blink.",
     },
@@ -28,31 +28,31 @@ export class MeditationState {
     },
     {
       name: "Inner Journey",
-      duration: 5,
+      duration: 8,
       instruction:
         "Move your attention to the black triangle surround the center red dot",
     },
     {
       name: "Bindu Meditation",
-      duration: 5,
+      duration: 12,
       instruction: "Rest your awareness at the central point (bindu)",
     },
     {
       name: "Unity",
-      duration: 6,
+      duration: 13,
       instruction: "Experience the oneness of form and consciousness",
     },
     {
       name: "Integration",
-      duration: 3,
+      duration: 7,
       instruction: "Slowly return your awareness to your surroundings",
     },
     {
       name: "Relaxation",
-      duration: 3,
+      duration: 10,
       instruction: "Relax and let the meditation wash over you",
     },
-    { name: "End", duration: 3, instruction: "End of meditation" },
+    { name: "After Image", duration: 120, instruction: "End of meditation" },
   ];
 
   constructor() {
