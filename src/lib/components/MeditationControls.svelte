@@ -85,20 +85,17 @@
           <span class="segment-name">{segment.name}</span>
           <Tooltip.Provider>
             <Tooltip.Root delayDuration={100}>
-            <Tooltip.Trigger >
-              <Info size={16} />
+            <Tooltip.Trigger>
+              <Info size={16} color="#ffd700"/>
             </Tooltip.Trigger>
-            <!-- <Tooltip.Portal> -->
-              <Tooltip.Content class="instruction">
+            <Tooltip.Portal>
+              <Tooltip.Content side="right" sideOffset={10} align="center">
                 {segment.instruction}
               </Tooltip.Content>
-            <!-- </Tooltip.Portal> -->
+            </Tooltip.Portal>
           </Tooltip.Root>
           </Tooltip.Provider>
-
           <span class="segment-duration">{formatTime(segment.duration)}</span>
-          
-          
         </div>
       {/each}
     </div>
@@ -112,7 +109,7 @@
     left: 0;
     width: 350px;
     height: 100vh;
-    background: rgba(0, 0, 0, 0.85);
+    border: 4px solid rgba(255, 255, 255, 0.1);
     backdrop-filter: blur(20px);
     border-right: 1px solid rgba(255, 255, 255, 0.1);
     z-index: 10;
@@ -225,7 +222,7 @@
     font-size: 1.2rem;
   }
 
-  :global(.instruction) {
+  :global([data-tooltip-content]) {
     margin: 0 0 1.5rem 0;
     line-height: 1.4;
     color: #e8e8e8;
@@ -234,6 +231,10 @@
     padding: 0.5rem;
     border-radius: 4px;
     border: 1px solid rgba(255, 255, 255, 0.2);
+    max-width: 280px;
+    word-wrap: break-word;
+    white-space: normal;
+    z-index: 1000;
   }
 
   .progress-container {
@@ -358,13 +359,27 @@
   .segment-name {
     font-size: 0.85rem;
     color: #e8e8e8;
-    flex: 1;
   }
 
   .segment-duration {
     font-size: 0.75rem;
     opacity: 0.6;
     color: #e8e8e8;
+    margin-left: auto;
+  }
+
+  :global([data-tooltip-trigger]) {
+    background: rgba(255, 215, 0, 0.1);
+    border: 1px solid rgba(255, 215, 0, 0.3);
+    border-radius: 4px;
+    padding: 0.25rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+  }
+
+  :global([data-tooltip-trigger]:hover) {
+    background: rgba(255, 215, 0, 0.2);
+    border-color: rgba(255, 215, 0, 0.5);
   }
 
   /* Mobile responsiveness */
