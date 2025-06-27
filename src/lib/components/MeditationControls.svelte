@@ -1,5 +1,7 @@
 <script lang="ts">
   import { getMeditationContext } from '$lib/stores/context';
+  import {  Tooltip } from 'bits-ui';
+  import Info from "phosphor-svelte/lib/Info";
   
   const meditation = getMeditationContext();
   let sidebarCollapsed = $state(false);
@@ -40,7 +42,7 @@
       {:else if meditation.active}
         <div class="session-info">
           <h3 class="current-segment">{meditation.currentSegmentData?.name}</h3>
-          <p class="instruction">{meditation.currentSegmentData?.instruction}</p>
+          
           
           <div class="progress-container">
             <div class="progress-bar">
@@ -54,6 +56,9 @@
           <div class="control-buttons">
             <button class="control-btn pause" onclick={() => meditation.pauseSession()}>⏸️ Pause</button>
             <button class="control-btn end" onclick={() => meditation.endSession()}>⏹️ End</button>
+          </div>
+          <div>
+            <button class="control-btn end" onclick={() => meditation.jumpToSegment(meditation.currentSegment + 1)}> Skip</button>
           </div>
         </div>
       {:else}
@@ -78,7 +83,22 @@
              class:completed={meditation.currentSegment > index}>
           <div class="segment-dot"></div>
           <span class="segment-name">{segment.name}</span>
+          <Tooltip.Provider>
+            <Tooltip.Root delayDuration={100}>
+            <Tooltip.Trigger >
+              <Info size={16} />
+            </Tooltip.Trigger>
+            <!-- <Tooltip.Portal> -->
+              <Tooltip.Content class="instruction">
+                {segment.instruction}
+              </Tooltip.Content>
+            <!-- </Tooltip.Portal> -->
+          </Tooltip.Root>
+          </Tooltip.Provider>
+
           <span class="segment-duration">{formatTime(segment.duration)}</span>
+          
+          
         </div>
       {/each}
     </div>
@@ -205,12 +225,15 @@
     font-size: 1.2rem;
   }
 
-  .instruction {
+  :global(.instruction) {
     margin: 0 0 1.5rem 0;
     line-height: 1.4;
-    opacity: 0.9;
     color: #e8e8e8;
     font-size: 0.9rem;
+    background: black;
+    padding: 0.5rem;
+    border-radius: 4px;
+    border: 1px solid rgba(255, 255, 255, 0.2);
   }
 
   .progress-container {
