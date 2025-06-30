@@ -16,7 +16,7 @@
 </script>
 
 <svelte:head>
-  <title>Guided Meditation - Shri Yantra</title>
+  <title>Guided Meditation - Trataka</title>
   <meta name="description" content="Interactive guided meditation with sacred geometry" />
 </svelte:head>
 

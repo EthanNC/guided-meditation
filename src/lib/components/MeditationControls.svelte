@@ -58,9 +58,6 @@
             <button class="control-btn pause" onclick={() => meditation.pauseSession()}>⏸️ Pause</button>
             <button class="control-btn end" onclick={() => meditation.endSession()}>⏹️ End</button>
           </div>
-          <div>
-            <button class="control-btn end" onclick={() => meditation.jumpToSegment(meditation.currentSegment + 1)}> Skip</button>
-          </div>
         </div>
       {:else}
         <!-- Paused state -->
@@ -81,7 +78,11 @@
       {#each meditation.segments as segment, index}
         <div class="timeline-segment" 
              class:active={meditation.currentSegment === index}
-             class:completed={meditation.currentSegment > index}>
+             class:completed={meditation.currentSegment > index}
+             onclick={() => meditation.jumpToSegment(index)}
+             onkeydown={(e) => (e.key === 'Enter' || e.key === ' ') && meditation.jumpToSegment(index)}
+             tabindex="0"
+             role="button">
           <div class="segment-dot"></div>
           <span class="segment-name">{segment.name}</span>
           <Tooltip.Provider>
@@ -321,6 +322,15 @@
     opacity: 0.5;
     transition: all 0.3s ease;
     border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    cursor: pointer;
+  }
+
+  .timeline-segment:hover {
+    opacity: 0.8;
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 6px;
+    padding: 0.5rem;
+    margin: 0 -0.5rem;
   }
 
   .timeline-segment:last-child {
