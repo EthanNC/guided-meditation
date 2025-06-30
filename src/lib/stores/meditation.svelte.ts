@@ -27,30 +27,34 @@ export class MeditationState {
         "Move your attention to the green triangles surround the center red dot",
     },
     {
-      name: "Inner Journey",
+      name: "Inner Gaze - Black",
       duration: 8,
       instruction:
-        "Move your attention to the black triangle surround the center red dot",
+        "Move your attention to the black triangles surround the center red dot",
     },
     {
-      name: "Bindu Meditation",
+      name: "Inner Gaze - Red",
       duration: 12,
-      instruction: "Rest your awareness at the central point (bindu)",
+      instruction:
+        "Move your attention to the red triangles surround the center red dot",
     },
     {
-      name: "Unity",
+      name: "Inner Gaze - Blue",
       duration: 13,
-      instruction: "Experience the oneness of form and consciousness",
+      instruction:
+        "Move your attention to the blue triangles surround the center red dot",
     },
     {
-      name: "Integration",
+      name: "Outer Gaze - Red",
       duration: 7,
-      instruction: "Slowly return your awareness to your surroundings",
+      instruction:
+        "Move your attention to the red petals on the outside of the yantra",
     },
     {
-      name: "Relaxation",
+      name: "Outer Gaze - Yellow",
       duration: 10,
-      instruction: "Relax and let the meditation wash over you",
+      instruction:
+        "Move your attention to the yellow petals on the outside of the yantra",
     },
     { name: "After Image", duration: 120, instruction: "End of meditation" },
   ];

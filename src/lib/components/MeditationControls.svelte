@@ -27,6 +27,7 @@
     <!-- Header -->
     <header class="meditation-header">
       <h1>Guided Trataka Meditation</h1>
+      <p>5 minutes fixed point gazing</p>
     </header>
 
     <!-- Session Controls -->
@@ -76,7 +77,7 @@
 
     <!-- Segment Timeline -->
     <div class="timeline" class:visible={meditation.active || meditation.elapsed > 0}>
-      <h4>Meditation Journey</h4>
+      <h4>Meditation Track</h4>
       {#each meditation.segments as segment, index}
         <div class="timeline-segment" 
              class:active={meditation.currentSegment === index}
@@ -114,7 +115,7 @@
     border-right: 1px solid rgba(255, 255, 255, 0.1);
     z-index: 10;
     transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-    overflow-y: auto;
+    overflow-y: hidden;
     overflow-x: hidden;
   }
 
