@@ -224,20 +224,7 @@
     font-size: 1.2rem;
   }
 
-  :global([data-tooltip-content]) {
-    margin: 0 0 1.5rem 0;
-    line-height: 1.4;
-    color: #e8e8e8;
-    font-size: 0.9rem;
-    background: black;
-    padding: 0.5rem;
-    border-radius: 4px;
-    border: 1px solid rgba(255, 255, 255, 0.2);
-    max-width: 280px;
-    word-wrap: break-word;
-    white-space: normal;
-    z-index: 1000;
-  }
+
 
   .progress-container {
     margin: 1rem 0;
@@ -377,6 +364,21 @@
     opacity: 0.6;
     color: #e8e8e8;
     margin-left: auto;
+  }
+
+  :global([data-tooltip-content]) {
+    margin: 0 0 1.5rem 0;
+    line-height: 1.4;
+    color: #e8e8e8;
+    font-size: 0.9rem;
+    background: #1a1a2e;
+    padding: 0.5rem;
+    border-radius: 4px;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    max-width: 280px;
+    word-wrap: break-word;
+    white-space: normal;
+    z-index: 1000;
   }
 
   :global([data-tooltip-trigger]) {
